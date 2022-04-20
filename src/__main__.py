@@ -9,7 +9,10 @@ from util.util import absolute_path, get_doc, get_graph, print_entities_to_list_
 def main():
     model = get_model_from_It(CustomIt())
     # show_model(model)
-    nlp = spacy.Language.from_config(???)
+    cfg = get_cfg()
+    from spacy.lang.en import English
+    nlp = English.from_config(cfg)
+    nlp.initialize()
 
     with open(absolute_path(f"/{RESOURCES_DIRNAME}/{BOOK_NAMES[CURR_BOOK_NR]}"), encoding="utf8") as text:
         doc = get_doc(nlp, text)
@@ -20,6 +23,14 @@ def main():
 
 
 
+def get_cfg():
+    import configparser
+    config = configparser.RawConfigParser()
+    config.read("config.cfg")
+    ret = dict()
+    for section in config.sections():
+        ret[section] = dict(config.items(section))
+    return ret
 
 if __name__ == '__main__':
     # python -m spacy init vectors en ./examples/gensim-model.txt ./examples/spacy
