@@ -49,12 +49,12 @@ def show_graph_with_labels(adjacency_matrix, mylabels):
 
 def get_doc(nlp, text):
     entireBook = text.read()
-    config = {"mode": "rule"}
-    nlp.remove_pip("ner")
-    nlp.add_pipe("lemmatizer", config=config)#lemmatize before ner.
-    nlp.add_pipe("ner", config=config)#lemmatize before ner.
+    nlp.add_pipe("attribute_ruler")
+    nlp.add_pipe("ner")
+    nlp.add_pipe('lemmatizer', before='ner')
     nlp.add_pipe("merge_entities")
     nlp.add_pipe("doc_cleaner")
+    nlp.initialize()
     doc = nlp(entireBook[100:1000000])
     return doc
 
