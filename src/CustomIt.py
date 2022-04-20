@@ -2,6 +2,7 @@ from gensim import utils
 
 from util.constants import RESOURCES_DIRNAME, BOOK_NAMES, CURR_BOOK_NR
 from util.util import absolute_path
+
 class CustomIt:
     """An iterator that yields sentences (lists of str)."""
 
