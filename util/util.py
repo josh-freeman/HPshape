@@ -49,9 +49,10 @@ def show_graph_with_labels(adjacency_matrix, mylabels):
 
 def get_doc(nlp, text):
     entireBook = text.read()
-    nlp.add_pipe("attribute_ruler")
+    ent_r = nlp.add_pipe("entity_ruler")
+    ent_r.initialize(get_examples=lambda: [],patterns=[{'label':'PERSON','pattern':'harry'}])
     nlp.add_pipe("ner")
-    nlp.add_pipe('lemmatizer', before='ner')
+    nlp.add_pipe('lemmatizer', before='ner', config={"mode": "lookup"})
     nlp.add_pipe("merge_entities")
     nlp.add_pipe("doc_cleaner")
     nlp.initialize()
@@ -140,7 +141,6 @@ def plot_with_matplotlib(x_vals, y_vals, labels):
 
 
 ##END OF GIVEN FUNCTIONS
-
 
 
 def show_model(model):

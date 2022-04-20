@@ -9,10 +9,11 @@ def main():
     cfg = get_cfg()
     from spacy.lang.en import English
     nlp = English.from_config(cfg)
+    nlp.vocab.vectors.from_disk(absolute_path("/examples/spacy/vocab"))
 
     with open(absolute_path(f"/{RESOURCES_DIRNAME}/{BOOK_NAMES[CURR_BOOK_NR]}"), encoding="utf8") as text:
         doc = get_doc(nlp, text)
-        print([i.text for i in doc.ents])
+        print([i.vector for i in nlp.vocab])
         # set similarity function of doc
         sim_graph = get_graph(doc)
         # show_graph_with_labels(sim_graph, [ent.text for ent in doc.ents[:100]])
