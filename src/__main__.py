@@ -1,9 +1,6 @@
-import gensim
-import spacy
-
 from CustomIt import CustomIt
 from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR
-from util.util import absolute_path, get_doc, get_graph, print_entities_to_list_file, get_model_from_It, show_model
+from util.util import absolute_path, get_doc, get_graph, print_entities_to_list_file, get_model_from_It
 
 
 def main():
@@ -12,7 +9,7 @@ def main():
     cfg = get_cfg()
     from spacy.lang.en import English
     nlp = English.from_config(cfg)
-    nlp.initialize()
+    
 
     with open(absolute_path(f"/{RESOURCES_DIRNAME}/{BOOK_NAMES[CURR_BOOK_NR]}"), encoding="utf8") as text:
         doc = get_doc(nlp, text)
