@@ -1,4 +1,4 @@
-from CustomIt import CustomIt
+from .CustomIt import CustomIt
 from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR
 from util.util import absolute_path, get_doc, get_graph, print_entities_to_list_file, get_model_from_It
 
