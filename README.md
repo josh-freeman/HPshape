@@ -1,10 +1,9 @@
 # NLPProject
 Here is the structure of the project so far:
-```.
+```
 ├── docs
 ├── examples
 │   ├── HP1.txt
-│   ├── config.cfg
 │   ├── crimeAndPunishment.txt
 │   ├── gensim-model.bin
 │   ├── gensim-model.txt
@@ -22,13 +21,7 @@ Here is the structure of the project so far:
 │   ├── spacy_vectors.zip
 │   ├── theBrothersKaramazov.txt
 │   ├── theGrandInquisitor.txt
-│   ├── tokenizer
-│   └── vocab
-│       ├── key2row
-│       ├── lookups.bin
-│       ├── strings.json
-│       ├── vectors
-│       └── vectors.cfg
+│   └── tokenizer
 ├── setup.cfg
 ├── setup.py
 ├── src
