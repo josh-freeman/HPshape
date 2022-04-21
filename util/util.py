@@ -2,6 +2,7 @@ import os
 from os.path import exists
 
 import gensim
+import spacy
 from unidecode import unidecode as decode
 
 from util.constants import GRAPH_TXT_NAME, RESOURCES_DIRNAME, LIST_FILE_NAME_TXT, WORD2VEC_MODEL_FILE_NAME_BIN, \
@@ -49,13 +50,26 @@ def show_graph_with_labels(adjacency_matrix, mylabels):
 
 def get_doc(nlp, text):
     entireBook = text.read()
-    ent_r = nlp.add_pipe("entity_ruler")
-    ent_r.initialize(get_examples=lambda: [],patterns=[{'label':'PERSON','pattern':'harry'}])
+
     nlp.add_pipe("ner")
+    ruler = nlp.add_pipe("entity_ruler", after="ner", config={"overwrite_ents": True})
+
+
     nlp.add_pipe('lemmatizer', before='ner', config={"mode": "lookup"})
     nlp.add_pipe("merge_entities")
     nlp.add_pipe("doc_cleaner")
     nlp.initialize()
+    patterns = [{"label": "PER", "pattern": [{"LOWER": "harry"}, {"LOWER": "potter"}]},
+                {"label": "PER", "pattern": [{"LOWER": "severus"}, {"LOWER": "snape"}]},
+                {"label": "PER", "pattern": [{"LOWER": "ronald"}, {"LOWER": "weasley"}]},
+                {"label": "PER", "pattern": [{"LOWER": "albus"},{"LOWER":"percival"}, {"LOWER": "dumbledore"}]},
+                ]
+    specific_forms_patterns_persons = [
+        {"label": "PER", "pattern": [{"ENT_TYPE": "PER"}, {"ORTH": ","}, {"ENT_TYPE": "PER"}]},
+        {"label": "PER", "pattern": [{"ENT_TYPE": "PER"}, {"OP": "+"}]},
+    ]
+    ruler.add_patterns(patterns)
+    ruler.add_patterns(specific_forms_patterns_persons)
     doc = nlp(entireBook[100:1000000])
     return doc
 

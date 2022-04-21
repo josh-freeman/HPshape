@@ -1,5 +1,6 @@
 from CustomIt import CustomIt
-from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR
+from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR, PREPROC
+from util.preProc import removepagelineshp, removeconsecutiveblanklines
 from util.util import absolute_path, get_doc, get_graph, print_entities_to_list_file, get_model_from_It
 
 
@@ -13,7 +14,6 @@ def main():
 
     with open(absolute_path(f"/{RESOURCES_DIRNAME}/{BOOK_NAMES[CURR_BOOK_NR]}"), encoding="utf8") as text:
         doc = get_doc(nlp, text)
-        print([i.vector for i in nlp.vocab])
         # set similarity function of doc
         sim_graph = get_graph(doc)
         # show_graph_with_labels(sim_graph, [ent.text for ent in doc.ents[:100]])
@@ -33,4 +33,8 @@ def get_cfg():
 if __name__ == '__main__':
     # python -m spacy init vectors en ./examples/gensim-model.txt ./examples/spacy
     # train?
+    if PREPROC:
+        path = absolute_path(f"{RESOURCES_DIRNAME}/{BOOK_NAMES[CURR_BOOK_NR]}")
+        removepagelineshp(path)
+        removeconsecutiveblanklines(path)
     main()
