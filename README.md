@@ -18,10 +18,8 @@ Here is the structure of the project so far:
 │   │       ├── strings.json
 │   │       ├── vectors
 │   │       └── vectors.cfg
-│   ├── spacy_vectors.zip
 │   ├── theBrothersKaramazov.txt
-│   ├── theGrandInquisitor.txt
-│   └── tokenizer
+│   └── theGrandInquisitor.txt
 ├── setup.cfg
 ├── setup.py
 ├── src
@@ -39,4 +37,4 @@ Here is the structure of the project so far:
     ├── __init__.py
     ├── constants.py
     ├── preProc.py
-    └── util.py```
+    └── util.py
