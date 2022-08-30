@@ -22,6 +22,7 @@ def removepagelineshp(path: str):
         doc.truncate()
         doc.close()
 
+
 def removeconsecutiveblanklines(path: str):
     """
 
@@ -35,3 +36,13 @@ def removeconsecutiveblanklines(path: str):
         doc.truncate()
         doc.close()
 
+
+def preproc(text: str, c: int) -> (list, list):
+    """
+    :param c: the window size
+    :param text:
+    :return: a tuple of
+     - first, a vocab of size V:=size(vocab). It is represented by a list of all words of interest found in the text.
+     - second, a list[(ndarray(shape=(V,1),ndarray(shape=(V,1)))]. Tuples represents a one-hot word, and its context (as a sum of the one-hot vectors of the words it comprises).
+    """
+    return ...

@@ -1,5 +1,9 @@
 import os
+import re
 from os.path import exists
+import torch
+import numpy as np
+from torch.utils.data import TensorDataset
 
 import gensim
 import spacy
@@ -54,18 +58,21 @@ def get_doc(nlp, text):
     nlp.add_pipe("ner")
     ruler = nlp.add_pipe("entity_ruler", after="ner", config={"overwrite_ents": True})
 
-
     nlp.add_pipe('lemmatizer', before='ner', config={"mode": "lookup"})
     nlp.add_pipe("merge_entities")
+    nlp.add_pipe("parser")  # for nouns
     nlp.add_pipe("doc_cleaner")
     nlp.initialize()
+
     patterns = [{"label": "PER", "pattern": [{"LOWER": "harry"}, {"LOWER": "potter"}]},
                 {"label": "PER", "pattern": [{"LOWER": "severus"}, {"LOWER": "snape"}]},
                 {"label": "PER", "pattern": [{"LOWER": "ronald"}, {"LOWER": "weasley"}]},
-                {"label": "PER", "pattern": [{"LOWER": "albus"},{"LOWER":"percival"}, {"LOWER": "dumbledore"}]},
+                {"label": "PER", "pattern": [{"LOWER": "albus"}, {"LOWER": "percival"}, {"LOWER": "dumbledore"}]},
                 ]
+
     specific_forms_patterns_persons = [
         {"label": "PER", "pattern": [{"ENT_TYPE": "PER"}, {"ORTH": ","}, {"ENT_TYPE": "PER"}]},
+        {"label": "PER", "pattern": [{"ENT_TYPE": "PER"}]},
         {"label": "PER", "pattern": [{"ENT_TYPE": "PER"}, {"OP": "+"}]},
     ]
     ruler.add_patterns(patterns)
@@ -164,3 +171,15 @@ def show_model(model):
 
 if __name__ == '__main__':
     pass  # normally, should not be used
+
+
+def buildDataSet(l: list) -> TensorDataset:
+    """
+
+    :param l: a list of (ndarray(shape=(V,1)))
+    :return:
+    """
+    (x, y) = zip(*l)
+    (tensor_x, tensor_y) = (torch.Tensor(x), torch.Tensor(y))
+
+    return TensorDataset(tensor_x, tensor_y)

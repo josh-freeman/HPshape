@@ -6,3 +6,5 @@ WORD2VEC_MODEL_FILE_NAME_BIN = "gensim-model.bin"
 WORD2VEC_MODEL_FILE_NAME_TXT = "gensim-model.txt"
 CURR_BOOK_NR = -1
 PREPROC = False
+BATCH_SIZE = 128
+D = 1e2
