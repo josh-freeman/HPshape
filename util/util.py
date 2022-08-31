@@ -81,7 +81,7 @@ def get_doc(nlp, text):
     return doc
 
 
-def get_model_from_It(customIt):
+def get_model_from_it(customIt):
     filepath_bin = absolute_path(f"/{RESOURCES_DIRNAME}/{WORD2VEC_MODEL_FILE_NAME_BIN}")
     filepath_txt = absolute_path(f"/{RESOURCES_DIRNAME}/{WORD2VEC_MODEL_FILE_NAME_TXT}")
     if not exists(filepath_bin):
@@ -173,7 +173,7 @@ if __name__ == '__main__':
     pass  # normally, should not be used
 
 
-def buildDataSet(l: list) -> TensorDataset:
+def build_data_set(l: list) -> TensorDataset:
     """
 
     :param l: a list of (ndarray(shape=(V,1)))
