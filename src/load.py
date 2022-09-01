@@ -1,3 +1,4 @@
+import torch.nn
 from torch import load
 
 from util.constants import CHECKPOINT_DIRNAME, MODEL_NAME
@@ -8,4 +9,7 @@ model: NN = load(absolute_path(
     f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"))
 
 if __name__ == '__main__':
-    model.encode("harry")
+    harry = model.encode("harry")
+    potter = model.encode("potter")
+
+    print(torch.nn.CosineSimilarity(0)(harry, potter))
