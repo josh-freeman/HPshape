@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -6,11 +7,10 @@ class NN(nn.Module):
     """ RNN, expects input shape (v)
     """
 
-    def __init__(self, v: int, d: int):
+    def __init__(self, v: int, d: int, vocab: np.array):
         super(NN, self).__init__()
 
-        self.V = v
-        self.D = d
+        self.vocab = vocab
 
         self._fc1 = nn.Linear(v, d)
         self._fc2 = nn.Linear(d, v)
@@ -21,8 +21,8 @@ class NN(nn.Module):
 
         return x  # will be made to be a distribution over possible words with nn.CrossEntropy()...
 
-    def encode(self, x):
-        return self._fc1(x)
+    def encode(self, word: str):
+        return self._fc1(np.where(self.vocab == word.lower(), 1, 0))
 
 
 def train_model(model, crit, opt, dl, epochs):

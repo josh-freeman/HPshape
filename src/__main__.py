@@ -18,7 +18,7 @@ def main():
         dataset = build_data_set(listOfTuples)  # TensorDataSet
         dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
 
-        model = NN(len(vocabList), D)
+        model = NN(len(vocabList), D, vocabList)
         criterion = nn.CrossEntropyLoss()
 
         opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)
