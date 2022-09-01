@@ -11,6 +11,7 @@ class NN(nn.Module):
         super(NN, self).__init__()
 
         self.vocab = vocab
+        self.embeddings = None  # to be updated after training
 
         self._fc1 = nn.Linear(v, d)
         self._fc2 = nn.Linear(d, v)
@@ -24,8 +25,14 @@ class NN(nn.Module):
     def encode(self, word: str):
         return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0)))
 
+    # TODO : decode
+    def decode(self, vec: torch.Tensor):
+        candidate_index = ...  # index of vector in self.embeddings that is closest to vec according to cos distance
+        return self.vocab[
+            candidate_index]  # word of vocab that has the closest encoding to vec according to cosine distance
 
-def train_model(model, crit, opt, dl, epochs):
+
+def train_model(model: NN, crit, opt, dl, epochs):
     for ep in range(epochs):
         # Training.
         model.train()
@@ -47,3 +54,5 @@ def train_model(model, crit, opt, dl, epochs):
 
             # 5.6 Zero-out the accumualated gradients.
             model.zero_grad()
+
+    model.embeddings = [model.encode(word) for word in model.vocab]
