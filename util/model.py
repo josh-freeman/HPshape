@@ -22,7 +22,7 @@ class NN(nn.Module):
         return x  # will be made to be a distribution over possible words with nn.CrossEntropy()...
 
     def encode(self, word: str):
-        return self._fc1(np.where(self.vocab == word.lower(), 1, 0))
+        return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0)))
 
 
 def train_model(model, crit, opt, dl, epochs):

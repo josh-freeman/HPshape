@@ -7,4 +7,5 @@ from util.util import absolute_path
 model: NN = load(absolute_path(
     f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"))
 
-model.encode("harry")
+if __name__ == '__main__':
+    model.encode("harry")
