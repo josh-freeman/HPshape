@@ -3,26 +3,23 @@ import torch.nn as nn
 
 
 class NN(nn.Module):
-    """ RNN, expects input shape (V) (or maybe VxN because of the RNN?).
+    """ RNN, expects input shape (v)
     """
 
-    def __init__(self, V, D):
+    def __init__(self, v: int, d: int):
         super(NN, self).__init__()
 
-        self.V = V
-        self.D = D
+        self.V = v
+        self.D = d
 
-        self._fc1 = nn.Linear(V, D)
-        self._fc2 = nn.Linear(D, V)
+        self._fc1 = nn.Linear(v, d)
+        self._fc2 = nn.Linear(d, v)
 
     def forward(self, x):
         x = self._fc1(x)  # for each layer, get with layer.state_dict()['weight'/'bias']
         x = self._fc2(x)
 
         return x  # will be made to be a distribution over possible words with nn.CrossEntropy()...
-
-
-
 
 
 def train_model(model, crit, opt, dl, epochs):

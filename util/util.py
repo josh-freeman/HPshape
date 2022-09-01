@@ -176,7 +176,7 @@ if __name__ == '__main__':
 def build_data_set(l: list) -> TensorDataset:
     """
 
-    :param l: a list of (ndarray(shape=(V,1)))
+    :param l: a list of (ndarray(shape=(v,1)))
     :return:
     """
     (x, y) = zip(*l)
