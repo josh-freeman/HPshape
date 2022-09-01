@@ -25,9 +25,10 @@ class NN(nn.Module):
     def encode(self, word: str):
         return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0)))
 
-    # TODO : decode
     def decode(self, vec: torch.Tensor):
-        candidate_index = np.argmax()  # index of vector in self.embeddings that is closest to vec according to cos distance
+        distances = [torch.nn.CosineSimilarity()(vec, v) for v in self.embeddings]  # cosine distances of each vector
+        candidate_index = np.argmax(
+            distances)  # index of vector in self.embeddings that is closest to vec according to cos distance
         return self.vocab[
             candidate_index]  # word of vocab that has the closest encoding to vec according to cosine distance
 
