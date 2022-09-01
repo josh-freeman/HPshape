@@ -23,10 +23,11 @@ class NN(nn.Module):
         return x  # will be made to be a distribution over possible words with nn.CrossEntropy()...
 
     def encode(self, word: str):
-        return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0)))
+        return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0))).detach()
 
     def decode(self, vec: torch.Tensor):
-        distances = [torch.nn.CosineSimilarity(0)(vec, v) for v in self.embeddings]  # cosine distances of each vector
+        vec = vec.detach()
+        distances = [torch.nn.CosineSimilarity(0)(vec, v.detach()) for v in self.embeddings]  # cosine distances of each vector
         candidate_index = np.argmax(
             distances)  # index of vector in self.embeddings that is closest to vec according to cos distance
         return self.vocab[
@@ -56,4 +57,4 @@ def train_model(model: NN, crit, opt, dl, epochs):
             # 5.6 Zero-out the accumualated gradients.
             model.zero_grad()
 
-    model.embeddings = [model.encode(word) for word in model.vocab]
+    model.embeddings = np.array([model.encode(word) for word in model.vocab])

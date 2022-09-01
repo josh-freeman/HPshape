@@ -1,3 +1,4 @@
+import numpy as np
 import torch.nn
 from torch import load
 
@@ -11,5 +12,7 @@ model: NN = load(absolute_path(
 if __name__ == '__main__':
     harry = model.encode("harry")
     potter = model.encode("potter")
+    snape = model.encode("snape")
+    severus = model.encode("severus")
 
-    print(torch.nn.CosineSimilarity(0)(harry, potter))
+    print(model.decode(model.encode("weasley") - model.encode("ron") + model.encode("harry")))
