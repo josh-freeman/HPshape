@@ -43,7 +43,7 @@ def remove_consecutive_blanklines(path: str):
 
 
 def remove_punctuation(text: str):
-    return text.translate(str.maketrans('', '', string.punctuation))
+    return text.translate(str.maketrans('', '', string.punctuation+'’'))
 
 
 def lemmatize(text: str):

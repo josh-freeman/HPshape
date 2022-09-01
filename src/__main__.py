@@ -1,3 +1,5 @@
+import torch
+
 from custom_it import CustomIt
 from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR, BATCH_SIZE, D
 from util.model import NN, train_model
@@ -20,10 +22,10 @@ def main():
         learning_rate = 0.01
         epochs = 100
 
-        opt = optim.SGD(model.parameters(), lr=learning_rate)  # TODO: why/how use Adam here?
+        opt = optim.Adam(model.parameters(), lr=learning_rate)
         train_model(model, criterion, opt, dataloader, epochs)
 
-        # TODO: retrieve representation(s?) from the model's linear layers
+        torch.save(model,)# TODO: retrieve representation(s?) from the model's linear layers
 
 
 if __name__ == '__main__':

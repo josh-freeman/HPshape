@@ -21,6 +21,9 @@ class NN(nn.Module):
 
         return x  # will be made to be a distribution over possible words with nn.CrossEntropy()...
 
+    def encode(self, x):
+        return self._fc1(x)
+
 
 def train_model(model, crit, opt, dl, epochs):
     for ep in range(epochs):
