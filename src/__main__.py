@@ -20,8 +20,10 @@ def main():
         learning_rate = 0.01
         epochs = 100
 
-        opt = optim.SGD(model.parameters(), lr=learning_rate) #TODO: why/how use Adam here?
+        opt = optim.SGD(model.parameters(), lr=learning_rate)  # TODO: why/how use Adam here?
         train_model(model, criterion, opt, dataloader, epochs)
+
+        # TODO: retrieve representation(s?) from the model's linear layers
 
 
 if __name__ == '__main__':
