@@ -1,7 +1,8 @@
 import torch
 
 from custom_it import CustomIt
-from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR, BATCH_SIZE, D
+from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR, BATCH_SIZE, D, MODEL_NAME, CHECKPOINT_DIRNAME, \
+    LEARNING_RATE, EPOCHS
 from util.model import NN, train_model
 from util.pre_proc import preproc
 from torch.utils.data import DataLoader
@@ -19,13 +20,16 @@ def main():
 
         model = NN(len(vocabList), D)
         criterion = nn.CrossEntropyLoss()
-        learning_rate = 0.01
-        epochs = 100
 
-        opt = optim.Adam(model.parameters(), lr=learning_rate)
-        train_model(model, criterion, opt, dataloader, epochs)
+        opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)
+        train_model(model, criterion, opt, dataloader, EPOCHS)
 
-        torch.save(model,)# TODO: retrieve representation(s?) from the model's linear layers
+        torch.save(model, absolute_path(
+            f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"))
+        # retrieve representation via "encode" function
+        # TODO : separate test file in which we load the ckpt to do the tests.
+        # TODO : use validation
+        # TODO :  after each epoch (or in case of KeyboardInterrupt), save.
 
 
 if __name__ == '__main__':
