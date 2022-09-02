@@ -1,20 +1,29 @@
+import torch
 from torch import load
 
 from util.constants import CHECKPOINT_DIRNAME, MODEL_NAME
-from util.model import NN
+from util.model import NN, device
 from util.util import absolute_path
 
-model: NN = load(absolute_path(
-    f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"))
 
 if __name__ == '__main__':
-    harry = model.encode("harry")
-    potter = model.encode("potter")
-    snape = model.encode("snape")
-    severus = model.encode("severus")
-    albus = model.encode("albus")
-    dumbledore = model.encode("dumbledore")
+    model: NN = load(absolute_path(
+        f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}")).to(device)
 
-    print(model.decode(model.encode("potter")))
-    print(model.decode(model.encode("snape")))
-    print(model.decode(model.encode("weasley")))
+    harry = model.encode("harry").to(device)
+    potter = model.encode("potter").to(device)
+    snape = model.encode("snape").to(device)
+    severus = model.encode("severus").to(device)
+    albus = model.encode("albus").to(device)
+    dumbledore = model.encode("dumbledore").to(device)
+    weasley = model.encode("weasley").to(device)
+
+    test1 = model.encode("lily").to(device)
+    dudley = model.encode("dudley").to(device)
+    poudlard = model.encode("hogwarts").to(device)
+    magic = model.encode("magic").to(device)
+
+    print((harry-test1).pow(2).sum().pow(1/2))
+    print(dudley.pow(2).sum().pow(1/2))
+    print(model.decode(harry - test1 + dudley))
+    print(model.decode(poudlard - magic))

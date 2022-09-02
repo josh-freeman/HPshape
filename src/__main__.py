@@ -23,7 +23,8 @@ def main():
     opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_model(model, CRITERION, opt, dataloader, EPOCHS)
 
-    # TODO: do this with the Vocab of the first book for all harry potter boooks
+    # TODO: do this with the Vocab of the first book for all harry potter books
+
 
     torch.save(model, absolute_path(
         f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"))

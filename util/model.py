@@ -1,9 +1,9 @@
 import numpy as np
 import torch
 import torch.nn as nn
+from tqdm import tqdm
 
-device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
-
+device = torch.device("cpu")
 
 class NN(nn.Module):
     """ RNN, expects input shape (v)
@@ -24,20 +24,20 @@ class NN(nn.Module):
 
         return x  # will be made to be a distribution over possible words with nn.CrossEntropy()...
 
-    def encode(self, word: str):
-        return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0))).detach()
+    def encode(self, word: str) -> torch.Tensor:
+        return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0)).to(device)).detach()
 
     def decode(self, vec: torch.Tensor):
         vec = vec.detach()
-        distances = [torch.nn.CosineSimilarity(0)(vec, v.detach()) for v in self.embeddings]  # cosine distances of each vector
-        candidate_index = np.argmax(
+        distances = [(vec-v.detach()).pow(2).sum().pow(1/2) for v in self.embeddings]  # cosine distances of each vector
+        candidate_index = np.argmin(
             distances)  # index of vector in self.embeddings that is closest to vec according to cos distance
         return self.vocab[
             candidate_index]  # word of vocab that has the closest encoding to vec according to cosine distance
 
 
 def train_model(model: NN, crit, opt, dl, epochs):
-    for ep in range(epochs):
+    for ep in tqdm(range(epochs)):
         # Training.
         model.train()
         for it, batch in enumerate(dl):
@@ -56,7 +56,7 @@ def train_model(model: NN, crit, opt, dl, epochs):
             # 5.5 Update the weights using optimizer.
             opt.step()
 
-            # 5.6 Zero-out the accumualated gradients.
+            # 5.6 Zero-out the accumulated gradients.
             model.zero_grad()
 
-    model.embeddings = np.array([model.encode(word) for word in model.vocab])
+    model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])

@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 
 BOOK_NAMES = ["HP1.txt", "HP2.txt"]
@@ -9,10 +10,11 @@ WORD2VEC_MODEL_FILE_NAME_TXT = "gensim-model.txt"
 CURR_BOOK_NR = -1
 PREPROC = False
 BATCH_SIZE = 128
-D = 50
-C= 2
+D = 500
+C = 2
 MODEL_NAME = "model.pth"
 CHECKPOINT_DIRNAME = "ckpt"
 LEARNING_RATE = 0.01
 EPOCHS = 100
 CRITERION = nn.CrossEntropyLoss()
+DEVICE = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
