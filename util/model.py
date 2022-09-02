@@ -3,6 +3,8 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 
+from util.constants import K
+
 device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 
 
@@ -10,8 +12,9 @@ class NN(nn.Module):
     """ RNN, expects input shape (v)
     """
 
-    def __init__(self, v: int, d: int, vocab: np.array):
+    def __init__(self, v: int, d: int, vocab: np.array, k=K):
         super(NN, self).__init__()
+        self.k = k  # the number of candidates we want for decoding.
 
         self.vocab = vocab
         self.embeddings = None  # to be updated after training
@@ -32,10 +35,9 @@ class NN(nn.Module):
         vec = vec.detach()
         distances = [(vec - v.detach()).pow(2).sum().pow(1 / 2) for v in
                      self.embeddings]  # cosine distances of each vector
-        candidate_index = np.argmin(
-            distances)  # index of vector in self.embeddings that is closest to vec according to cos distance
+        candidate_indices = np.argpartition(distances, self.k)[:self.k]  # k ***nearest*** neighbors
         return self.vocab[
-            candidate_index]  # word of vocab that has the closest encoding to vec according to cosine distance
+            candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 
 
 def train_model(model: NN, crit, opt, dl, epochs):

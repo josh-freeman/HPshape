@@ -18,3 +18,4 @@ LEARNING_RATE = 0.01
 EPOCHS = 100
 CRITERION = nn.CrossEntropyLoss()
 DEVICE = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
+K = 5
