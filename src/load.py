@@ -16,5 +16,5 @@ if __name__ == '__main__':
     model: NN = load(absolute_path(
         f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"), map_location=device)
 
-    print(x_is_to_y_as_blank_is_to_z("wizard", "warlock", "harry"))
-    print(x_is_to_y_as_blank_is_to_z("harry", "potter", "dursley"))
+    print(x_is_to_y_as_blank_is_to_z("harry", "hedwidge", "dudley"))
+    print(x_is_to_y_as_blank_is_to_z("vernon", "dursley", "potter"))
