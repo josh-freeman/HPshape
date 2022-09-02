@@ -14,5 +14,7 @@ if __name__ == '__main__':
     potter = model.encode("potter")
     snape = model.encode("snape")
     severus = model.encode("severus")
+    albus = model.encode("albus")
+    dumbledore = model.encode("dumbledore")
 
     print(model.decode(model.encode("weasley") - model.encode("ron") + model.encode("harry")))

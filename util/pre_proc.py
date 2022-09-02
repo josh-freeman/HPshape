@@ -7,7 +7,12 @@ import spacy
 import numpy as np
 
 
-def allinoneline(path: str):
+def all_in_one_line(path: str):
+    """
+    replace doc with a single line.
+    :param path:
+    :return:
+    """
     with open(path, "rw", encoding="utf8") as doc:
         txt = doc.read()
         doc.write(txt.replace("\n", " "))
@@ -102,7 +107,7 @@ def preproc(text: str, c: int) -> (list, list):
     """
 
     text = remove_punctuation(text.strip().lower())  # remove punctuation and lower.
-    text = re.sub('\s+|[^a-zA-Z]', ' ', text)  # remove spaces and anything remaining that is not an English letter
+    text = re.sub('\s+|[^a-zA-Z]', ' ', text)  # remove whitespace and anything remaining that is not an English letter
     tokenized_word_list = lemmatize(text)  # list of lemmas
 
     x_and_ys_list = x_and_ys_list_from(tokenized_word_list, c)  # make a first list of tuples from the tokens.

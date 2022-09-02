@@ -179,7 +179,8 @@ def build_data_set(l: list) -> TensorDataset:
     :param l: a list of (ndarray(shape=(v,1)))
     :return:
     """
+
     (x, y) = zip(*l)
-    (tensor_x, tensor_y) = (torch.Tensor(x), torch.Tensor(y))
+    (tensor_x, tensor_y) = (torch.Tensor(np.array(x)), torch.Tensor(np.array(y)))
 
     return TensorDataset(tensor_x, tensor_y)
