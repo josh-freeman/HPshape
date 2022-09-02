@@ -1,6 +1,6 @@
 import torch
 from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, CURR_BOOK_NR, BATCH_SIZE, D, MODEL_NAME, CHECKPOINT_DIRNAME, \
-    LEARNING_RATE, EPOCHS, CRITERION
+    LEARNING_RATE, EPOCHS, CRITERION, C
 from util.model import NN, train_model
 from util.pre_proc import preproc, remove_page_lines_hp
 from torch.utils.data import DataLoader
@@ -12,17 +12,18 @@ device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 
 def main():
     # show_model(model)
-    path = absolute_path(f"/{RESOURCES_DIRNAME}/{BOOK_NAMES[CURR_BOOK_NR]}")
 
+    head, *tail = BOOK_NAMES
+    path = absolute_path(f"/{RESOURCES_DIRNAME}/{head}")
     remove_page_lines_hp(path)  # specific to harry potter books, they have useless lines.
-    (vocabList, listOfTuples) = preproc(open(path, encoding='utf8').read(), 2)
-
+    (vocabList, listOfTuples) = preproc(open(path, encoding='utf8').read(), C)
     dataset = build_data_set(listOfTuples)  # TensorDataSet
     dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
-
     model = NN(len(vocabList), D, vocabList).to(device)
     opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_model(model, CRITERION, opt, dataloader, EPOCHS)
+
+    # TODO: do this with the Vocab of the first book for all harry potter boooks
 
     torch.save(model, absolute_path(
         f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"))

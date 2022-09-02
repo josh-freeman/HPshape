@@ -1,6 +1,6 @@
 from torch import nn
 
-BOOK_NAMES = ["theGrandInquisitor.txt", "theBrothersKaramazov.txt", "crimeAndPunishment.txt", "HP1.txt"]
+BOOK_NAMES = ["HP1.txt", "HP2.txt"]
 RESOURCES_DIRNAME = "examples"
 GRAPH_TXT_NAME = "test.txt"
 LIST_FILE_NAME_TXT = "listFile.txt"
@@ -10,6 +10,7 @@ CURR_BOOK_NR = -1
 PREPROC = False
 BATCH_SIZE = 128
 D = 50
+C= 2
 MODEL_NAME = "model.pth"
 CHECKPOINT_DIRNAME = "ckpt"
 LEARNING_RATE = 0.01

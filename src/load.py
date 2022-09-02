@@ -1,5 +1,3 @@
-import numpy as np
-import torch.nn
 from torch import load
 
 from util.constants import CHECKPOINT_DIRNAME, MODEL_NAME
@@ -17,4 +15,6 @@ if __name__ == '__main__':
     albus = model.encode("albus")
     dumbledore = model.encode("dumbledore")
 
-    print(model.decode(model.encode("weasley") - model.encode("ron") + model.encode("harry")))
+    print(model.decode(model.encode("potter")))
+    print(model.decode(model.encode("snape")))
+    print(model.decode(model.encode("weasley")))

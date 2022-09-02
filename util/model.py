@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from __main__ import device
+device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 
 
 class NN(nn.Module):
