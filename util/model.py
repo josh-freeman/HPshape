@@ -3,7 +3,8 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 
-device = torch.device("cpu")
+device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
+
 
 class NN(nn.Module):
     """ RNN, expects input shape (v)
@@ -29,7 +30,8 @@ class NN(nn.Module):
 
     def decode(self, vec: torch.Tensor):
         vec = vec.detach()
-        distances = [(vec-v.detach()).pow(2).sum().pow(1/2) for v in self.embeddings]  # cosine distances of each vector
+        distances = [(vec - v.detach()).pow(2).sum().pow(1 / 2) for v in
+                     self.embeddings]  # cosine distances of each vector
         candidate_index = np.argmin(
             distances)  # index of vector in self.embeddings that is closest to vec according to cos distance
         return self.vocab[

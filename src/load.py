@@ -1,4 +1,3 @@
-import torch
 from torch import load
 
 from util.constants import CHECKPOINT_DIRNAME, MODEL_NAME
@@ -8,7 +7,7 @@ from util.util import absolute_path
 
 if __name__ == '__main__':
     model: NN = load(absolute_path(
-        f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}")).to(device)
+        f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"),map_location=device)
 
     harry = model.encode("harry").to(device)
     potter = model.encode("potter").to(device)
