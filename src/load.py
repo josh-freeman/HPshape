@@ -5,24 +5,16 @@ from util.model import NN, device
 from util.util import absolute_path
 
 
+def x_is_to_y_as_blank_is_to_z(x, y, z):
+    x_enc = model.encode(x).to(device)
+    y_enc = model.encode(y).to(device)
+    z_enc = model.encode(z).to(device)
+    return model.decode(x_enc - y_enc + z_enc)
+
+
 if __name__ == '__main__':
     model: NN = load(absolute_path(
-        f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"),map_location=device)
+        f"/{CHECKPOINT_DIRNAME}/{MODEL_NAME}"), map_location=device)
 
-    harry = model.encode("harry").to(device)
-    potter = model.encode("potter").to(device)
-    snape = model.encode("snape").to(device)
-    severus = model.encode("severus").to(device)
-    albus = model.encode("albus").to(device)
-    dumbledore = model.encode("dumbledore").to(device)
-    weasley = model.encode("weasley").to(device)
-
-    test1 = model.encode("lily").to(device)
-    dudley = model.encode("dudley").to(device)
-    poudlard = model.encode("hogwarts").to(device)
-    magic = model.encode("magic").to(device)
-
-    print((harry-test1).pow(2).sum().pow(1/2))
-    print(dudley.pow(2).sum().pow(1/2))
-    print(model.decode(harry - test1 + dudley))
-    print(model.decode(poudlard - magic))
+    print(x_is_to_y_as_blank_is_to_z("wizard", "warlock", "harry"))
+    print(x_is_to_y_as_blank_is_to_z("harry", "potter", "dursley"))
