@@ -1,3 +1,5 @@
+from torch import nn
+
 BOOK_NAMES = ["theGrandInquisitor.txt", "theBrothersKaramazov.txt", "crimeAndPunishment.txt", "HP1.txt"]
 RESOURCES_DIRNAME = "examples"
 GRAPH_TXT_NAME = "test.txt"
@@ -12,3 +14,4 @@ MODEL_NAME = "model.pth"
 CHECKPOINT_DIRNAME = "ckpt"
 LEARNING_RATE = 0.01
 EPOCHS = 100
+CRITERION = nn.CrossEntropyLoss()

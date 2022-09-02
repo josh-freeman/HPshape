@@ -2,6 +2,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from __main__ import device
+
 
 class NN(nn.Module):
     """ RNN, expects input shape (v)
@@ -40,7 +42,7 @@ def train_model(model: NN, crit, opt, dl, epochs):
         model.train()
         for it, batch in enumerate(dl):
             # 5.1 Load a batch.
-            x, y = batch
+            x, y = [d.to(device) for d in batch]
 
             # 5.2 Run forward pass.
             logits = model(x)
