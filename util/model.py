@@ -33,7 +33,8 @@ class NN(nn.Module):
 
     def decode(self, vec: torch.Tensor):
         vec = vec.detach()
-        distances = [torch.nn.CosineSimilarity(0)(vec, v.detach()) for v in self.embeddings]  # cosine distances of each vector # cosine distances of each vector
+        distances = [torch.nn.CosineSimilarity(0)(vec, v.detach()) for v in
+                     self.embeddings]  # cosine distances of each vector # cosine distances of each vector
         candidate_indices = np.argpartition(distances, -K)[-K:]  # k ***nearest*** neighbors TODO: replace with self.k
         return self.vocab[
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
@@ -61,5 +62,6 @@ def train_model(model: NN, crit, opt, dl, epochs):
 
             # 5.6 Zero-out the accumulated gradients.
             model.zero_grad()
-
+    # TODO : use validation
+    # TODO : after each epoch (or in case of KeyboardInterrupt), save.
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])

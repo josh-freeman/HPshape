@@ -2,7 +2,8 @@ import torch
 from torch import optim
 from torch.utils.data import DataLoader
 
-from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, BATCH_SIZE, D, WORD2VEC_HOMEMADE_MODEL_NAME, CHECKPOINT_DIRNAME, \
+from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, BATCH_SIZE, D, WORD2VEC_HOMEMADE_MODEL_NAME, \
+    CHECKPOINT_DIRNAME, \
     LEARNING_RATE, EPOCHS, CRITERION, C
 from util.model import NN, train_model
 from util.pre_proc import pre_proc
@@ -29,8 +30,7 @@ def main():
     torch.save(model, absolute_path(
         f"/{CHECKPOINT_DIRNAME}/{WORD2VEC_HOMEMADE_MODEL_NAME}"))
     # retrieve representation via "encode" function
-    # TODO : use validation
-    # TODO : after each epoch (or in case of KeyboardInterrupt), save.
+
 
 
 if __name__ == '__main__':
