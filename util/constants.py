@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-BOOK_NAMES = ["HP1.txt", "HP2.txt"]
+BOOK_NAMES = ["HP1.txt", "HP2.txt","HP3.txt","HP5.txt","HP6.txt","HP7.txt"]
 RESOURCES_DIRNAME = "examples"
 GRAPH_TXT_NAME = "test.txt"
 LIST_FILE_NAME_TXT = "listFile.txt"
