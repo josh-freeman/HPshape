@@ -33,9 +33,8 @@ class NN(nn.Module):
 
     def decode(self, vec: torch.Tensor):
         vec = vec.detach()
-        distances = [(vec - v.detach()).pow(2).sum().pow(1 / 2) for v in
-                     self.embeddings]  # cosine distances of each vector
-        candidate_indices = np.argpartition(distances, K)[:K]  # k ***nearest*** neighbors TODO: replace with self.k
+        distances = [torch.nn.CosineSimilarity(0)(vec, v.detach()) for v in self.embeddings]  # cosine distances of each vector # cosine distances of each vector
+        candidate_indices = np.argpartition(distances, -K)[-K:]  # k ***nearest*** neighbors TODO: replace with self.k
         return self.vocab[
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 

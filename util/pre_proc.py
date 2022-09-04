@@ -48,7 +48,7 @@ def remove_consecutive_blanklines(path: str):
 
 
 def remove_punctuation(text: str):
-    return text.translate(str.maketrans('', '', string.punctuation+'’'))
+    return text.translate(str.maketrans('', '', string.punctuation + '’'))
 
 
 def lemmatize(text: str):
@@ -96,23 +96,30 @@ def vocab_from(x_and_ys_list, c):
     return [k for k, v in cnt.items() if v >= c]
 
 
-def preproc(text: str, c: int) -> (list, list):
+def pre_proc(path: str, c: int, vocab=None) -> (list, list):
     """
+    :param vocab:
     :param c: the window size
-    :param text:
-    :return: a tuple of - first, a vocab of size v:=size(vocab). It is
-    represented by a list of all words of interest found in the text. - second, a list[(array(shape=(v,1),
-    array(shape=(v,1)))]. Tuples represents a one-hot word, and its context (as a sum of the one-hot vectors of the
+    :param path: the absolute path to the text
+    :return: a tuple of
+    - first, a vocab of size v:=size(vocab). It is represented by a list of all words of interest found in the text. If
+      vocab is not None, the argument vocab will simply be returned as such.
+
+    - second, corresponding samples, as a one-hot word, and its context (as a sum of the one-hot vectors of the
     words it comprises).
     """
+    if path is None:
+        return vocab, []  # check for empty path.
 
+    remove_page_lines_hp(path)
+    text = open(path, encoding='utf8').read()
     text = remove_punctuation(text.strip().lower())  # remove punctuation and lower.
     text = re.sub('\s+|[^a-zA-Z]', ' ', text)  # remove whitespace and anything remaining that is not an English letter
     tokenized_word_list = lemmatize(text)  # list of lemmas
 
     x_and_ys_list = x_and_ys_list_from(tokenized_word_list, c)  # make a first list of tuples from the tokens.
-    vocab = list(
-        set(vocab_from(x_and_ys_list, c)))  # Establish a list of all words at the center of c contexts (:=vocab)
+    vocab = list(set(vocab_from(x_and_ys_list, c))) if vocab is None else vocab  # Establish a list of all words at the
+    # center of c contexts *if no value is provided*
 
     vocab = np.array(vocab)  # as np array for optimization!
 
