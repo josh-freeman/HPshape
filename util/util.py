@@ -165,7 +165,7 @@ def plot_with_matplotlib(x_vals, y_vals, labels):
 def plot_losses(losses_validation: list, losses_training=None, description=""):
     x, y = zip(*enumerate(losses_validation))
     plt.scatter(x, y)
-    x_p, y_p = zip(*enumerate(losses_validation))
+    x_p, y_p = zip(*enumerate(losses_training))
     plt.scatter(x_p, y_p)
     plt.title(description)
     plt.show()
