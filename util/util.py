@@ -162,7 +162,7 @@ def plot_with_matplotlib(x_vals, y_vals, labels):
 
 
 ##END OF GIVEN FUNCTIONS
-def plot_losses(losses):
+def plot_losses(losses:torch.Tensor):
     x, y = zip(*enumerate(losses))
     plt.scatter(x, y)
     plt.show()

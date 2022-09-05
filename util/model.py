@@ -86,7 +86,6 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=
                     out_data = model(x)
                     loss_run += crit(out_data, y)
                 loss = loss_run / nva
-                average_validation_losses += loss
-                print(f"Average loss at epoch {ep}: {loss}")
+                average_validation_losses.append(loss.item())
     plot_losses(average_validation_losses)
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])
