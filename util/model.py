@@ -47,6 +47,7 @@ class NN(nn.Module):
 
 def train_model(model: NN, crit, opt, dl, epochs):
     for ep in tqdm(range(epochs)):
+
         # Training.
         model.train()
         for it, batch in enumerate(dl):
