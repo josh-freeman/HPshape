@@ -76,7 +76,7 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=
             model.zero_grad()
         # TODO : use validation
         # TODO : after each epoch (or in case of KeyboardInterrupt), save.
-        losses_training.append(loss)
+        losses_training.append(loss.item())
         if dl_validation is not None and nva is not None:
             model.eval()
             with torch.no_grad():
