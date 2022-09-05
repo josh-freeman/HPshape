@@ -20,7 +20,7 @@ def main():
 
     path, *rest_of_paths = paths
     (vocab, list_of_samples_training) = pre_proc(path, C, training=True)
-    (_, list_of_samples_validation) = pre_proc(path, C, training=False)
+    (_, list_of_samples_validation) = pre_proc(path, C, training=False,vocab=vocab)
     model = NN(D, vocab).to(device)
     opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
