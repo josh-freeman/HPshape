@@ -112,7 +112,9 @@ def pre_proc(path: str, c: int, vocab=None) -> (list, list):
         return vocab, []  # check for empty path.
 
     remove_page_lines_hp(path)
-    text = open(path, encoding='utf8').read()
+    remove_consecutive_blanklines(path)
+    data = open(path, encoding='utf8')
+    text = data.read()
     text = remove_punctuation(text.strip().lower())  # remove punctuation and lower.
     text = re.sub('\s+|[^a-zA-Z]', ' ', text)  # remove whitespace and anything remaining that is not an English letter
     tokenized_word_list = lemmatize(text)  # list of lemmas
@@ -137,5 +139,5 @@ def pre_proc(path: str, c: int, vocab=None) -> (list, list):
 
     x_and_ys_list = list(map(lambda x_ys: (__one_hot(x_ys[0]), sum(list(map(__one_hot, x_ys[1])))),
                              x_and_ys_list))  # to tuples (__one_hot,sum_of_one_hots)
-
+    data.close()
     return vocab, x_and_ys_list
