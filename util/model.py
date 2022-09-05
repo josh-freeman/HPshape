@@ -51,8 +51,9 @@ class NN(nn.Module):
 
 def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=None, title=""):
     average_validation_losses = []
+    losses_training = []
     for ep in tqdm(range(epochs)):
-
+        loss = 0
         # Training.
         model.train()
         for it, batch in enumerate(dl_train):
@@ -75,7 +76,7 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=
             model.zero_grad()
         # TODO : use validation
         # TODO : after each epoch (or in case of KeyboardInterrupt), save.
-
+        losses_training.append(loss)
         if dl_validation is not None and nva is not None:
             model.eval()
             with torch.no_grad():
@@ -86,6 +87,6 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=
                     out_data = model(x)
                     loss_run += crit(out_data, y)
                 loss_cur = loss_run / nva
-                average_validation_losses.append(loss_cur.item())
-    plot_losses(average_validation_losses, f"Loss as a function of epoch for {title}")
+                average_validation_losses.append([loss_cur.item()])
+    plot_losses(average_validation_losses, losses_training=losses_training,description=f"Loss as a function of epoch for {title}")
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])

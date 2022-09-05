@@ -27,8 +27,8 @@ def main():
 
     rest_of_paths.append(None)  # add an empty path to simulate a do-while
     for path in rest_of_paths:
-        dataset_training = build_data_set(list_of_samples_training)  # TensorDataSet
-        dataset_validation = build_data_set(list_of_samples_validation)  # TensorDataSet
+        dataset_training = build_data_set(list_of_samples_training)  # TensorDataSet for training
+        dataset_validation = build_data_set(list_of_samples_validation)  # TensorDataSet for validation
         data_loader_training = DataLoader(dataset_training, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         data_loader_validation = DataLoader(dataset_validation, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         train_model(model, CRITERION, opt, data_loader_training, EPOCHS, dl_validation=data_loader_validation,
