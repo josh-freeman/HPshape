@@ -98,7 +98,7 @@ def vocab_from(x_and_ys_list):
     return [k for k, v in cnt.items() if v >= MIN_WORD_THRESHOLD]
 
 
-def pre_proc(path: str, c: int, vocab=None, training=True) -> (list[str], list[tuple[np.ndarray, np.ndarray]]):
+def pre_proc(path: str, c: int, vocab: list = None, training=True) -> (list[str], list[tuple[np.ndarray, np.ndarray]]):
     """
     :param training: whether to use the lower 90 % of the string (true) or upper 10 % (false)
     :param vocab:

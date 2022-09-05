@@ -4,6 +4,7 @@ import torch.nn as nn
 from tqdm import tqdm
 
 from util.constants import K
+from util.util import plot_losses
 
 device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 
@@ -48,12 +49,13 @@ class NN(nn.Module):
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 
 
-def train_model(model: NN, crit, opt, dl, epochs, dl_ev=None, nva=None):
+def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=None):
+    average_validation_losses = []
     for ep in tqdm(range(epochs)):
 
         # Training.
         model.train()
-        for it, batch in enumerate(dl):
+        for it, batch in enumerate(dl_train):
             # 5.1 Load a batch.
             x, y = [d.to(device) for d in batch]
 
@@ -74,15 +76,17 @@ def train_model(model: NN, crit, opt, dl, epochs, dl_ev=None, nva=None):
         # TODO : use validation
         # TODO : after each epoch (or in case of KeyboardInterrupt), save.
 
-        if dl_ev is not None and nva is not None:
+        if dl_validation is not None and nva is not None:
             model.eval()
             with torch.no_grad():
                 loss_run = 0
-                for iteration, batch in enumerate(dl_ev):
+                for iteration, batch in enumerate(dl_validation):
                     # Get batch of data.
                     x, y = [d.to(device) for d in batch]
                     out_data = model(x)
-                    loss_run = crit(out_data, y)
+                    loss_run += crit(out_data, y)
                 loss = loss_run / nva
+                average_validation_losses += loss
                 print(f"Average loss at epoch {ep}: {loss}")
+    plot_losses(average_validation_losses)
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])
