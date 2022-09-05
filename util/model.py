@@ -74,7 +74,7 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=
 
             # 5.6 Zero-out the accumulated gradients.
             model.zero_grad()
-        # TODO : use validation
+
         # TODO : after each epoch (or in case of KeyboardInterrupt), save.
         losses_training.append(loss.item())
         if dl_validation is not None and nva is not None:

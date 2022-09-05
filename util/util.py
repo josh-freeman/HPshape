@@ -164,9 +164,11 @@ def plot_with_matplotlib(x_vals, y_vals, labels):
 ##END OF GIVEN FUNCTIONS
 def plot_losses(losses_validation: list, losses_training=None, description=""):
     x, y = zip(*enumerate(losses_validation))
-    plt.scatter(x, y)
+    val_scatter = plt.scatter(x, y)
     x_p, y_p = zip(*enumerate(losses_training))
-    plt.scatter(x_p, y_p)
+    tr_scatter = plt.scatter(x_p, y_p)
+
+    plt.legend((val_scatter, tr_scatter), ("Validation", "Training"))
     plt.title(description)
     plt.show()
 
