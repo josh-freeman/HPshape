@@ -23,6 +23,7 @@ def main():
     (_, list_of_samples_validation) = pre_proc(path, C, training=False, vocab=vocab)
     model = NN(D, vocab).to(device)
     opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    title = title_from_path(path)
 
     rest_of_paths.append(None)  # add an empty path to simulate a do-while
     for path in rest_of_paths:
@@ -31,7 +32,8 @@ def main():
         data_loader_training = DataLoader(dataset_training, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         data_loader_validation = DataLoader(dataset_validation, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         train_model(model, CRITERION, opt, data_loader_training, EPOCHS, dl_validation=data_loader_validation,
-                    nva=len(dataset_validation), title=title_from_path(path))
+                    nva=len(dataset_validation), title=title)
+        title = title_from_path(path)
         (_, list_of_samples_training) = pre_proc(path, C, vocab)
 
     torch.save(model, absolute_path(
