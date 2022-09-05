@@ -7,7 +7,7 @@ from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, BATCH_SIZE, D, WORD2VE
     LEARNING_RATE, EPOCHS, CRITERION, C
 from util.model import NN, train_model
 from util.pre_proc import pre_proc
-from util.util import absolute_path, build_data_set
+from util.util import absolute_path, build_data_set, title_from_path
 
 device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 
@@ -31,7 +31,7 @@ def main():
         data_loader_training = DataLoader(dataset_training, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         data_loader_validation = DataLoader(dataset_validation, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         train_model(model, CRITERION, opt, data_loader_training, EPOCHS, dl_validation=data_loader_validation,
-                    nva=len(dataset_validation))
+                    nva=len(dataset_validation), title=title_from_path(path))
         (_, list_of_samples_training) = pre_proc(path, C, vocab)
 
     torch.save(model, absolute_path(

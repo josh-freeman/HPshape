@@ -49,7 +49,7 @@ class NN(nn.Module):
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 
 
-def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=None):
+def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=None, title=""):
     average_validation_losses = []
     for ep in tqdm(range(epochs)):
 
@@ -87,5 +87,5 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=
                     loss_run += crit(out_data, y)
                 loss_cur = loss_run / nva
                 average_validation_losses.append(loss_cur.item())
-    plot_losses(average_validation_losses)
+    plot_losses(average_validation_losses, f"Loss as a function of epoch for {title}")
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])

@@ -162,10 +162,15 @@ def plot_with_matplotlib(x_vals, y_vals, labels):
 
 
 ##END OF GIVEN FUNCTIONS
-def plot_losses(losses: list):
+def plot_losses(losses: list, description=""):
     x, y = zip(*enumerate(losses))
     plt.scatter(x, y)
+    plt.title(description)
     plt.show()
+
+
+def title_from_path(path: str):
+    return "" if path is None else os.path.basename(os.path.normpath(path))
 
 
 def show_model(model):
