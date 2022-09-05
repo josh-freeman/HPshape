@@ -21,3 +21,4 @@ CRITERION = nn.CrossEntropyLoss()
 DEVICE = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 K: int = 10  # k for k nearest neighbours search.
 MIN_WORD_THRESHOLD = 5  # minimum number of times a word has to appear to be included in the vocabulary.
+F: int = 10  # fraction into which we want to divide our training vs evaluation samples (for F=10, 9/10 vs 1/10)

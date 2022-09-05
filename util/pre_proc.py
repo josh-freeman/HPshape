@@ -6,6 +6,8 @@ import spacy
 
 import numpy as np
 
+from util.constants import F
+
 
 def all_in_one_line(path: str):
     """
@@ -96,8 +98,9 @@ def vocab_from(x_and_ys_list):
     return [k for k, v in cnt.items() if v >= MIN_WORD_THRESHOLD]
 
 
-def pre_proc(path: str, c: int, vocab=None) -> (list[str], list[tuple[np.ndarray, np.ndarray]]):
+def pre_proc(path: str, c: int, vocab=None, training=True) -> (list[str], list[tuple[np.ndarray, np.ndarray]]):
     """
+    :param training: whether to use the lower 90 % of the string (true) or upper 10 % (false)
     :param vocab:
     :param c: the window size
     :param path: the absolute path to the text
@@ -115,8 +118,11 @@ def pre_proc(path: str, c: int, vocab=None) -> (list[str], list[tuple[np.ndarray
     remove_consecutive_blank_lines(path)
     with open(path, encoding='utf8') as data:
         text = data.read()
+        assert len(text) != 0
+        text = text[:-len(text) // F] if training else text[-len(text) // F:]  # slice text as needed for train/eval
         text = remove_punctuation(text.strip().lower())  # remove punctuation and lower.
-        text = re.sub('\s+|[^a-zA-Z]', ' ', text)  # remove whitespace and anything remaining that is not an English letter
+        text = re.sub('\s+|[^a-zA-Z]', ' ',
+                      text)  # remove whitespace and anything remaining that is not an English letter
         tokenized_word_list = lemmatize(text)  # list of lemmas
 
         x_and_ys_list = x_and_ys_list_from(tokenized_word_list, c)  # make a first list of tuples from the tokens.

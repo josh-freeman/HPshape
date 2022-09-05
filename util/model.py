@@ -33,19 +33,22 @@ class NN(nn.Module):
         return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0)).to(device)).detach()
 
     def decode(self, vec: torch.Tensor, k=None, l2=True):
-        if l2:
-            metric = lambda x: (vec - x.detach()).pow(2).sum()
-        else:
-            metric = lambda x: -torch.nn.CosineSimilarity(0)(vec, x)
+        def metric(x):
+            if l2:
+                return (vec - x.detach()).pow(2).sum()
+            else:
+                return -torch.nn.CosineSimilarity(0)(vec, x)
+
         k = self.k if k is None else k
         vec = vec.detach()
-        distances = [metric(v) for v in self.embeddings]  # cosine distances of each vector # cosine distances of each vector
+        distances = [metric(v) for v in
+                     self.embeddings]  # cosine distances of each vector # cosine distances of each vector
         candidate_indices = np.argpartition(distances, k)[:k]  # k ***nearest*** neighbors
         return self.vocab[
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 
 
-def train_model(model: NN, crit, opt, dl, epochs):
+def train_model(model: NN, crit, opt, dl, epochs, dl_ev=None, nva=None):
     for ep in tqdm(range(epochs)):
 
         # Training.
@@ -68,6 +71,18 @@ def train_model(model: NN, crit, opt, dl, epochs):
 
             # 5.6 Zero-out the accumulated gradients.
             model.zero_grad()
-    # TODO : use validation
-    # TODO : after each epoch (or in case of KeyboardInterrupt), save.
+        # TODO : use validation
+        # TODO : after each epoch (or in case of KeyboardInterrupt), save.
+
+        if dl_ev is not None and nva is not None:
+            model.eval()
+            with torch.no_grad():
+                loss_run = 0
+                for iteration, batch in enumerate(dl_ev):
+                    # Get batch of data.
+                    x, y = [d.to(device) for d in batch]
+                    out_data = model(x)
+                    loss_run = crit(out_data, y)
+                loss = loss_run / nva
+                print(f"Average loss at epoch {ep}: {loss}")
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])
