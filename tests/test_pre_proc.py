@@ -10,9 +10,10 @@ class Test(TestCase):
                                                                        'to', 'be', 'cool'])
 
     def test_vocab_from(self):
-        assert(['cool', 'my', 'bro', 'I', 'like'] == vocab_from([('cool', ['swag', 'be', 'my', 'bro']), ('my', ['be', 'cool', 'bro', 'I']),
-                          ('bro', ['cool', 'my', 'I', 'like']), ('I', ['my', 'bro', 'like', 'to']),
-                          ('like', ['bro', 'I', 'to', 'be'])], 1))
+        assert(['cool', 'my', 'bro', 'I', 'like'] == vocab_from(
+            [('cool', ['swag', 'be', 'my', 'bro']), ('my', ['be', 'cool', 'bro', 'I']),
+             ('bro', ['cool', 'my', 'I', 'like']), ('I', ['my', 'bro', 'like', 'to']),
+             ('like', ['bro', 'I', 'to', 'be'])]))
 
     def test_x_and_ys_list_from(self):
         assert ([('cool', ['swag', 'be', 'my', 'bro']), ('my', ['be', 'cool', 'bro', 'I']),

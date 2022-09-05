@@ -1,6 +1,6 @@
 from torch import load
 
-from util.constants import CHECKPOINT_DIRNAME, WORD2VEC_HOMEMADE_MODEL_NAME
+from util.constants import CHECKPOINT_DIRNAME, WORD2VEC_HOMEMADE_MODEL_NAME, K
 from util.model import NN, device
 from util.util import absolute_path
 
@@ -15,8 +15,5 @@ def x_is_to_y_as_blank_is_to_z(x: str, y: str, z: str):
 if __name__ == '__main__':
     model: NN = load(absolute_path(
         f"/{CHECKPOINT_DIRNAME}/{WORD2VEC_HOMEMADE_MODEL_NAME}"), map_location=device)
-    print(model.decode(model.encode("queen")))
-    print(x_is_to_y_as_blank_is_to_z("harry", "hedwig", "dudley"))
-    print(x_is_to_y_as_blank_is_to_z("dumbledore", "albus", "harry"))
-    print(x_is_to_y_as_blank_is_to_z("", "albus", "harry"))
-
+    model.k = K
+    print(model.decode(model.encode("queen"), k=1, l2=True))

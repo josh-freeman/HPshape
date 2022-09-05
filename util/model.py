@@ -12,10 +12,11 @@ class NN(nn.Module):
     """ RNN, expects input shape (v)
     """
 
-    def __init__(self, v: int, d: int, vocab: np.array, k=K):
+    def __init__(self, d: int, vocab: np.array, k=K):
         super(NN, self).__init__()
         self.k = k  # the number of candidates we want for decoding.
 
+        v = len(vocab)
         self.vocab = vocab
         self.embeddings = None  # to be updated after training
 
@@ -31,11 +32,15 @@ class NN(nn.Module):
     def encode(self, word: str) -> torch.Tensor:
         return self._fc1(torch.Tensor(np.where(self.vocab == word.lower(), 1, 0)).to(device)).detach()
 
-    def decode(self, vec: torch.Tensor):
+    def decode(self, vec: torch.Tensor, k=None, l2=True):
+        if l2:
+            metric = lambda x: (vec - x.detach()).pow(2).sum()
+        else:
+            metric = lambda x: -torch.nn.CosineSimilarity(0)(vec, x)
+        k = self.k if k is None else k
         vec = vec.detach()
-        distances = [torch.nn.CosineSimilarity(0)(vec, v.detach()) for v in
-                     self.embeddings]  # cosine distances of each vector # cosine distances of each vector
-        candidate_indices = np.argpartition(distances, -K)[-K:]  # k ***nearest*** neighbors TODO: replace with self.k
+        distances = [metric(v) for v in self.embeddings]  # cosine distances of each vector # cosine distances of each vector
+        candidate_indices = np.argpartition(distances, k)[:k]  # k ***nearest*** neighbors
         return self.vocab[
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 

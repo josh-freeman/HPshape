@@ -13,11 +13,14 @@ device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 
 
 def main():
+    """
+    preprocess + initialize + train
+    """
     paths = list(map(lambda book_name: absolute_path(f"/{RESOURCES_DIRNAME}/{book_name}"), BOOK_NAMES))
 
     path, *rest_of_paths = paths
     (vocab, list_of_samples) = pre_proc(path, C)
-    model = NN(len(vocab), D, vocab).to(device)
+    model = NN(D, vocab).to(device)
     opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     rest_of_paths.append(None)  # add an empty path to simulate a do-while

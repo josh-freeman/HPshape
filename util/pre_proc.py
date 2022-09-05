@@ -33,7 +33,7 @@ def remove_page_lines_hp(path: str):
         doc.close()
 
 
-def remove_consecutive_blanklines(path: str):
+def remove_consecutive_blank_lines(path: str):
     """
 
     :param path: the path to a given book
@@ -83,20 +83,20 @@ def x_and_ys_list_from(tokenized_word_list: list, c: int):
     return ret
 
 
-def vocab_from(x_and_ys_list, c):
+def vocab_from(x_and_ys_list):
     """
     Establish a list of all words at the center of c contexts
     :param x_and_ys_list: list[(array(shape=(v,1),
     array(shape=(v,1)))]
-    :param c:
     :return: an ordered SET (list with no doubles)
     """
     x, _ = zip(*x_and_ys_list)
     cnt = Counter(x)
-    return [k for k, v in cnt.items() if v >= c]
+    from util.constants import MIN_WORD_THRESHOLD
+    return [k for k, v in cnt.items() if v >= MIN_WORD_THRESHOLD]
 
 
-def pre_proc(path: str, c: int, vocab=None) -> (list, list):
+def pre_proc(path: str, c: int, vocab=None) -> (list[str], list[tuple[np.ndarray, np.ndarray]]):
     """
     :param vocab:
     :param c: the window size
@@ -112,32 +112,31 @@ def pre_proc(path: str, c: int, vocab=None) -> (list, list):
         return vocab, []  # check for empty path.
 
     remove_page_lines_hp(path)
-    remove_consecutive_blanklines(path)
-    data = open(path, encoding='utf8')
-    text = data.read()
-    text = remove_punctuation(text.strip().lower())  # remove punctuation and lower.
-    text = re.sub('\s+|[^a-zA-Z]', ' ', text)  # remove whitespace and anything remaining that is not an English letter
-    tokenized_word_list = lemmatize(text)  # list of lemmas
+    remove_consecutive_blank_lines(path)
+    with open(path, encoding='utf8') as data:
+        text = data.read()
+        text = remove_punctuation(text.strip().lower())  # remove punctuation and lower.
+        text = re.sub('\s+|[^a-zA-Z]', ' ', text)  # remove whitespace and anything remaining that is not an English letter
+        tokenized_word_list = lemmatize(text)  # list of lemmas
 
-    x_and_ys_list = x_and_ys_list_from(tokenized_word_list, c)  # make a first list of tuples from the tokens.
-    vocab = list(set(vocab_from(x_and_ys_list, c))) if vocab is None else vocab  # Establish a list of all words at the
-    # center of c contexts *if no value is provided*
+        x_and_ys_list = x_and_ys_list_from(tokenized_word_list, c)  # make a first list of tuples from the tokens.
+        vocab = list(set(vocab_from(x_and_ys_list))) if vocab is None else vocab  # Establish a list of all words at the
+        # center of c contexts *if no value is provided*
 
-    vocab = np.array(vocab)  # as np array for optimization!
+        vocab = np.array(vocab)  # as np array for optimization!
 
-    x_and_ys_list = [(x, ys) for (x, ys) in x_and_ys_list if
-                     x in vocab and all(y in vocab for y in ys)]  # only keep tuples containing words in vocab
+        x_and_ys_list = [(x, ys) for (x, ys) in x_and_ys_list if
+                         x in vocab and all(y in vocab for y in ys)]  # only keep tuples containing words in vocab
 
-    def __one_hot(word) -> np.array:
-        """
-        return one hot version of a word according to the vocab variable
-        :param word: the word to be represented as one-hot.
-        :return:
-        """
+        def __one_hot(word) -> np.array:
+            """
+            return one hot version of a word according to the vocab variable
+            :param word: the word to be represented as one-hot.
+            :return:
+            """
 
-        return np.where(vocab == word, 1, 0)
+            return np.where(vocab == word, 1, 0)
 
-    x_and_ys_list = list(map(lambda x_ys: (__one_hot(x_ys[0]), sum(list(map(__one_hot, x_ys[1])))),
-                             x_and_ys_list))  # to tuples (__one_hot,sum_of_one_hots)
-    data.close()
+        x_and_ys_list = list(map(lambda x_ys: (__one_hot(x_ys[0]), sum(list(map(__one_hot, x_ys[1])))),
+                                 x_and_ys_list))  # to tuples (__one_hot,sum_of_one_hots)
     return vocab, x_and_ys_list
