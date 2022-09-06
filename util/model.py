@@ -18,7 +18,7 @@ class NN(nn.Module):
         self.k = k  # the number of candidates we want for decoding.
 
         v = len(vocab)
-        self.vocab = vocab
+        self.vocab = np.array(vocab)
         self.embeddings = None  # to be updated after training
 
         self._fc1 = nn.Linear(v, d)
@@ -54,7 +54,7 @@ def train_model(model: NN, crit, opt, dl_train, epochs, n_train_samples: int, n_
     average_validation_losses = []
     average_training_losses = []
     for ep in tqdm(range(epochs)):
-        total_loss = 0
+        total_loss= 0
         # Training.
         model.train()
         for it, batch in enumerate(dl_train):
@@ -67,7 +67,7 @@ def train_model(model: NN, crit, opt, dl_train, epochs, n_train_samples: int, n_
             # 5.3 Compute loss (using 'criterion').
             loss = crit(logits, y)
 
-            total_loss += loss
+            total_loss: torch.Tensor = total_loss + loss
 
             # 5.4 Run backward pass.
             loss.backward()
