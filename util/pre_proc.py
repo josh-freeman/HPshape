@@ -60,8 +60,10 @@ def lemmatize(text: str):
     :return: list of lemmas
     """
     assert (not any(p in text for p in string.punctuation))
-    load_model = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
-    doc = load_model(text)
+
+    nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
+    nlp.max_length = 2000000  # allocate 2 MB of RAM for the lemmatizer
+    doc = nlp(text)
     return [token.lemma_ for token in doc]
 
 
@@ -123,7 +125,7 @@ def pre_proc(path: str, c: int, vocab: list = None, training=True) -> (list[str]
         text = remove_punctuation(text.strip().lower())  # remove punctuation and lower.
         text = re.sub('\s+|[^a-zA-Z]', ' ',
                       text)  # remove whitespace and anything remaining that is not an English letter
-        tokenized_word_list = lemmatize(text)  # list of lemmas
+        tokenized_word_list = lemmatize(text)  # list of lemmas.
 
         x_and_ys_list = x_and_ys_list_from(tokenized_word_list, c)  # make a first list of tuples from the tokens.
         vocab = list(set(vocab_from(x_and_ys_list))) if vocab is None else vocab  # Establish a list of all words at the
