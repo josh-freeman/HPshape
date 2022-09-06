@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-BOOK_NAMES = ["HP1_and_2_and_3.txt", "HP4.txt", "HP5.txt", "HP6.txt", "HP7.txt"]
+BOOK_NAMES = ["HP1_and_2_and_3.txt", "HP4_and_6.txt", "HP5.txt", "HP7.txt"]
 RESOURCES_DIRNAME = "examples"
 GRAPH_TXT_NAME = "test.txt"
 LIST_FILE_NAME_TXT = "listFile.txt"
@@ -15,10 +15,10 @@ C = 2
 WORD2VEC_HOMEMADE_MODEL_NAME = "model.pth"
 CHECKPOINT_DIRNAME = "ckpt"
 LEARNING_RATE = 0.01
-EPOCHS = 2
+EPOCHS = 20
 CRITERION = nn.CrossEntropyLoss()
 DEVICE = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 K: int = 10  # k for k nearest neighbours search.
 MIN_WORD_THRESHOLD = 5  # minimum number of times a word has to appear to be included in the vocabulary.
 F: int = 10  # fraction into which we want to divide our training vs evaluation samples (for F=10, 9/10 vs 1/10)
-RAM_AMOUNT_LEMMATIZER = 2000000  # allocate 2 MB of RAM for the lemmatizer
+RAM_AMOUNT_LEMMATIZER = 5000000  # allocate 2 MB of RAM for the lemmatizer
