@@ -1,6 +1,7 @@
 import torch
 from torch import optim
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, BATCH_SIZE, D, WORD2VEC_HOMEMADE_MODEL_NAME, \
     CHECKPOINT_DIRNAME, \
@@ -18,10 +19,10 @@ def main():
     """
     paths = list(map(lambda book_name: absolute_path(f"/{RESOURCES_DIRNAME}/{book_name}"), BOOK_NAMES))
 
-    vocab = vocab_from_paths_to_text_files(paths)  # make a pass through all books, establishing a vocabulary.
+    vocab = vocab_from_paths_to_text_files(tqdm(paths))  # make a pass through all books, establishing a vocabulary.
 
     path, *rest_of_paths = paths
-    (_, list_of_samples_training) = pre_proc(path, C, training=True)
+    (_, list_of_samples_training) = pre_proc(path, C, training=True, vocab=vocab)
     (_, list_of_samples_validation) = pre_proc(path, C, training=False, vocab=vocab)
     model = NN(D, vocab).to(device)
     opt = optim.Adam(model.parameters(), lr=LEARNING_RATE)

@@ -88,10 +88,11 @@ def x_and_ys_list_from(tokenized_word_list: list, c: int):
     return ret
 
 
-def vocab_from_paths_to_text_files(paths: list[str]):
+def vocab_from_paths_to_text_files(paths):
     list_of_words = []
     for path in paths:
-        with open(path, encoding="utf-8") as text:
+        with open(path, encoding="utf-8") as file:
+            text = file.read()
             list_of_words += clean_to_word_list(text)
 
     return vocab_from_list_of_words(list_of_words)
