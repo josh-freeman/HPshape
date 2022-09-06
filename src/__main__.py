@@ -32,7 +32,7 @@ def main():
         data_loader_training = DataLoader(dataset_training, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         data_loader_validation = DataLoader(dataset_validation, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         train_model(model, CRITERION, opt, data_loader_training, EPOCHS, dl_validation=data_loader_validation,
-                    nva=len(dataset_validation), title=title)
+                    n_validation_samples=len(dataset_validation), title=title)
         title = title_from_path(path)
         (_, list_of_samples_training) = pre_proc(path, C, vocab)
 

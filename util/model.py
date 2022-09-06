@@ -49,7 +49,7 @@ class NN(nn.Module):
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 
 
-def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=None, title=""):
+def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, n_validation_samples=None, title=""):
     average_validation_losses = []
     losses_training = []
     for ep in tqdm(range(epochs)):
@@ -77,16 +77,16 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, nva=
 
         # TODO : after each epoch (or in case of KeyboardInterrupt), save.
         losses_training.append(loss.item())
-        if dl_validation is not None and nva is not None:
+        if dl_validation is not None and n_validation_samples is not None:
             model.eval()
             with torch.no_grad():
-                loss_run = 0
+                sum_of_validation_losses = 0
                 for iteration, batch in enumerate(dl_validation):
                     # Get batch of data.
                     x, y = [d.to(device) for d in batch]
                     out_data = model(x)
-                    loss_run += crit(out_data, y)
-                loss_cur = loss_run / nva
-                average_validation_losses.append(loss_cur.item())
+                    sum_of_validation_losses += crit(out_data, y)
+                average_validation_loss = sum_of_validation_losses / n_validation_samples
+                average_validation_losses.append(average_validation_loss.item())
     plot_losses(average_validation_losses, losses_training=losses_training,description=f"Loss as a function of epoch for {title}")
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])
