@@ -6,7 +6,7 @@ import spacy
 
 import numpy as np
 
-from util.constants import F
+from util.constants import F, RAM_AMOUNT_LEMMATIZER
 
 
 def all_in_one_line(path: str):
@@ -62,9 +62,10 @@ def lemmatize(text: str):
     assert (not any(p in text for p in string.punctuation))
 
     nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
-    nlp.max_length = 2000000  # allocate 2 MB of RAM for the lemmatizer
+    nlp.max_length = RAM_AMOUNT_LEMMATIZER
     doc = nlp(text)
-    return [token.lemma_ for token in doc]
+    return [token.lemma_ for token in doc if
+            all(not c.isspace() for c in token.lemma_)]  # disallow whitespace in tokens
 
 
 def context_around_index(i, tokenized_word_list, c):
@@ -87,7 +88,7 @@ def x_and_ys_list_from(tokenized_word_list: list, c: int):
     return ret
 
 
-def vocab_from(x_and_ys_list):
+def vocab_from(x_and_ys_list: list[tuple]):
     """
     Establish a list of all words at the center of c contexts
     :param x_and_ys_list: list[(array(shape=(v,1),
@@ -95,9 +96,12 @@ def vocab_from(x_and_ys_list):
     :return: an ordered SET (list with no doubles)
     """
     x, _ = zip(*x_and_ys_list)
+    assert all(all(not c.isspace() for c in word) for word in x)
+
     cnt = Counter(x)
+
     from util.constants import MIN_WORD_THRESHOLD
-    return [k for k, v in cnt.items() if v >= MIN_WORD_THRESHOLD]
+    return [word for word, count in cnt.items() if count >= MIN_WORD_THRESHOLD]
 
 
 def pre_proc(path: str, c: int, vocab: list = None, training=True) -> (list[str], list[tuple[np.ndarray, np.ndarray]]):
