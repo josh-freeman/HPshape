@@ -31,8 +31,9 @@ def main():
         dataset_validation = build_data_set(list_of_samples_validation)  # TensorDataSet for validation
         data_loader_training = DataLoader(dataset_training, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
         data_loader_validation = DataLoader(dataset_validation, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
-        train_model(model, CRITERION, opt, data_loader_training, EPOCHS, dl_validation=data_loader_validation,
-                    n_validation_samples=len(dataset_validation), title=title)
+        train_model(model, CRITERION, opt, data_loader_training, EPOCHS, len(list_of_samples_training),
+                    n_validation_samples=len(list_of_samples_validation), title=title,
+                    dl_validation=data_loader_validation)
         title = title_from_path(path)
         (_, list_of_samples_training) = pre_proc(path, C, vocab)
 

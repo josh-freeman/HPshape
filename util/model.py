@@ -49,11 +49,12 @@ class NN(nn.Module):
             candidate_indices]  # word of vocab that has the closest encoding to vec according to cosine distance
 
 
-def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, n_validation_samples=None, title=""):
+def train_model(model: NN, crit, opt, dl_train, epochs, n_train_samples: int, n_validation_samples=None,
+                title="", dl_validation=None):
     average_validation_losses = []
-    losses_training = []
+    average_training_losses = []
     for ep in tqdm(range(epochs)):
-        loss = 0
+        total_loss = 0
         # Training.
         model.train()
         for it, batch in enumerate(dl_train):
@@ -66,6 +67,8 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, n_va
             # 5.3 Compute loss (using 'criterion').
             loss = crit(logits, y)
 
+            total_loss += loss
+
             # 5.4 Run backward pass.
             loss.backward()
 
@@ -74,9 +77,8 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, n_va
 
             # 5.6 Zero-out the accumulated gradients.
             model.zero_grad()
-
-        # TODO : after each epoch (or in case of KeyboardInterrupt), save.
-        losses_training.append(loss.item())
+        average_training_loss = total_loss / n_train_samples
+        average_training_losses.append(average_training_loss.item())
         if dl_validation is not None and n_validation_samples is not None:
             model.eval()
             with torch.no_grad():
@@ -88,5 +90,6 @@ def train_model(model: NN, crit, opt, dl_train, epochs, dl_validation=None, n_va
                     sum_of_validation_losses += crit(out_data, y)
                 average_validation_loss = sum_of_validation_losses / n_validation_samples
                 average_validation_losses.append(average_validation_loss.item())
-    plot_losses(average_validation_losses, losses_training=losses_training,description=f"Loss as a function of epoch for {title}")
+    plot_losses(average_validation_losses, losses_training=average_training_losses,
+                description=f"Loss as a function of epoch for {title}")
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab])
