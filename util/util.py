@@ -1,17 +1,11 @@
 import os
-import re
-from os.path import exists
-import torch
+
 import numpy as np
+import torch
 from matplotlib import pyplot as plt
 from torch.utils.data import TensorDataset, DataLoader
 
-import gensim
-import spacy
-from unidecode import unidecode as decode
-
-from util.constants import GRAPH_TXT_NAME, RESOURCES_DIRNAME, LIST_FILE_NAME_TXT, WORD2VEC_MODEL_FILE_NAME_BIN, \
-    WORD2VEC_MODEL_FILE_NAME_TXT, BATCH_SIZE
+from util.constants import BATCH_SIZE
 
 
 def absolute_path(relative_path):
