@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 
-from util.constants import K
+from util.constants import K, DROPOUT_RATE
 from util.util import plot_losses
 
 device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
@@ -22,10 +22,12 @@ class NN(nn.Module):
         self.embeddings = None  # to be updated after training
 
         self._fc1 = nn.Linear(v, d)
+        self.dropout = nn.Dropout(DROPOUT_RATE)
         self._fc2 = nn.Linear(d, v)
 
     def forward(self, x):
         x = self._fc1(x)  # for each layer, get with layer.state_dict()['weight'/'bias']
+        x = self.dropout(x)
         x = self._fc2(x)
 
         return x  # will be made to be a distribution over possible words with nn.CrossEntropy()...
