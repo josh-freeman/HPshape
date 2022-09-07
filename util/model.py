@@ -53,8 +53,8 @@ def train_model(model: NN, crit, opt, dl_train, epochs, n_train_samples: int, n_
                 title="", dl_validation=None):
     average_validation_losses = []
     average_training_losses = []
-    for ep in tqdm(range(epochs)):
-        total_loss= 0
+    for ep in tqdm(range(epochs), desc=title):
+        total_loss = 0
         # Training.
         model.train()
         for it, batch in enumerate(dl_train):
