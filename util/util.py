@@ -16,6 +16,17 @@ def absolute_path(relative_path):
     return os.path.dirname(__file__) + "/../" + relative_path
 
 
+def get_total_text_from_paths(paths):
+    text_final = ""
+    for path in paths:
+        with open(path, encoding="utf-8") as file:
+            text_final += file.read()
+
+    text_final = text_final.replace("'s", "")
+    text_final = text_final.replace("'s", "")
+    return text_final
+
+
 def plot_losses(losses_validation: list, losses_training=None, description=""):
     x, y = zip(*enumerate(losses_validation))
     val_scatter = plt.scatter(x, y)

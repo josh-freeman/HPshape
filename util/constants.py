@@ -21,5 +21,6 @@ DEVICE = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 K: int = 10  # k for k nearest neighbours search.
 MIN_WORD_THRESHOLD = 5  # minimum number of times a word has to appear to be included in the vocabulary.
 F: int = 10  # fraction into which we want to divide our training vs evaluation samples (for F=10, 9/10 vs 1/10)
-RAM_AMOUNT_LEMMATIZER = 5000000  # allocate 2 MB of RAM for the lemmatizer
-DROPOUT_RATE = 0.0 # it is probably a bad idea to use dropout here, as the network is tiny.
+RAM_AMOUNT_SPACY_MODELS = 10000000  # allocate 2 MB of RAM for the lemmatizer
+DROPOUT_RATE = 0.0  # it is probably a bad idea to use dropout here, as the network is tiny.
+ENTITY_LABEL_FOR_CLUSTERING = 'PERSON'

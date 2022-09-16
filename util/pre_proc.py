@@ -6,7 +6,8 @@ import spacy
 
 import numpy as np
 
-from util.constants import F, RAM_AMOUNT_LEMMATIZER
+from util.constants import F, RAM_AMOUNT_SPACY_MODELS
+from util.util import get_total_text_from_paths
 
 
 def all_in_one_line(path: str):
@@ -62,7 +63,7 @@ def lemmatize(text: str):
     assert (not any(p in text for p in string.punctuation))
 
     nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
-    nlp.max_length = RAM_AMOUNT_LEMMATIZER
+    nlp.max_length = RAM_AMOUNT_SPACY_MODELS
     doc = nlp(text)
     return [token.lemma_ for token in doc if
             all(not c.isspace() for c in token.lemma_)]  # disallow whitespace in tokens
@@ -89,13 +90,8 @@ def x_and_ys_list_from(tokenized_word_list: list, c: int):
 
 
 def vocab_from_paths_to_text_files(paths):
-    list_of_words = []
-    for path in paths:
-        with open(path, encoding="utf-8") as file:
-            text = file.read()
-            list_of_words += clean_to_word_list(text)
-
-    return vocab_from_list_of_words(list_of_words)
+    text_final = get_total_text_from_paths(paths)
+    return vocab_from_list_of_words(clean_to_word_list(text_final))
 
 
 def vocab_from_list_of_words(text_as_list_of_lemmatized_words):
@@ -112,7 +108,7 @@ def vocab_from_list_of_words(text_as_list_of_lemmatized_words):
     return [word for word, count in cnt.items() if count >= MIN_WORD_THRESHOLD]
 
 
-def pre_proc(path: str, c: int, vocab: list = None, training=True) -> (list[str], list[tuple[np.ndarray, np.ndarray]]):
+def pre_proc(path: str, c: int, vocab: list = None, training=True):
     """
     :param training: whether to use the lower 90 % of the string (true) or upper 10 % (false)
     :param vocab:
@@ -143,9 +139,6 @@ def pre_proc(path: str, c: int, vocab: list = None, training=True) -> (list[str]
 
         vocab = np.array(vocab)  # as np array for optimization!
 
-        x_and_ys_list = [(x, ys) for (x, ys) in x_and_ys_list if
-                         x in vocab and all(y in vocab for y in ys)]  # only keep tuples containing words in vocab
-
         def __one_hot(word) -> np.array:
             """
             return one hot version of a word according to the vocab variable
@@ -155,8 +148,9 @@ def pre_proc(path: str, c: int, vocab: list = None, training=True) -> (list[str]
 
             return np.where(vocab == word, 1, 0)
 
-        x_and_ys_list = list(map(lambda x_ys: (__one_hot(x_ys[0]), sum(list(map(__one_hot, x_ys[1])))),
-                                 x_and_ys_list))  # to tuples (__one_hot,sum_of_one_hots)
+        x_and_ys_list = [(__one_hot(x), sum([__one_hot(y) for y in ys])) for (x, ys) in x_and_ys_list if
+                         x in vocab and all(y in vocab for y in
+                                            ys)]  # only keep tuples containing words in vocab, and change them to one hot
     return vocab, x_and_ys_list
 
 

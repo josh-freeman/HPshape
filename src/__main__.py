@@ -1,14 +1,13 @@
 import torch
 from torch import optim
-from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, BATCH_SIZE, D, WORD2VEC_HOMEMADE_MODEL_NAME, \
+from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, D, WORD2VEC_HOMEMADE_MODEL_NAME, \
     CHECKPOINT_DIRNAME, \
     LEARNING_RATE, EPOCHS, CRITERION, C
 from util.model import NN, train_model
 from util.pre_proc import pre_proc, vocab_from_paths_to_text_files
-from util.util import absolute_path, build_data_set, title_from_path, build_dl
+from util.util import absolute_path, title_from_path, build_dl
 
 device = torch.device(('cpu', 'cuda')[torch.cuda.is_available()])
 
