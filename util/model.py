@@ -94,4 +94,5 @@ def train_model(model: NN, crit, opt, dl_train, epochs, n_train_samples: int, n_
                 average_validation_losses.append(average_validation_loss.item())
     plot_losses(average_validation_losses, losses_training=average_training_losses,
                 description=f"Loss as a function of epoch for {title}")
+
     model.embeddings = np.array([model.encode(word).cpu() for word in model.vocab], dtype=object)

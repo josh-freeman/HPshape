@@ -35,6 +35,7 @@ def plot_losses(losses_validation: list, losses_training=None, description=""):
 
     plt.legend((val_scatter, tr_scatter), ("Validation", "Training"))
     plt.title(description)
+    plt.savefig(description+".png")
     plt.show()
 
 
