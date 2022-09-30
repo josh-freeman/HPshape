@@ -9,7 +9,7 @@ Can we associate a style of writing to a shape? This is the kind of idea we expl
 - (First we learned about NLP by focusing on chapters 23 and 24 of the Modern AI book by Peter Norvig and Russell. Learning about theoretical concepts, like context free grammars and suchlike, was instrumental to get a better grasp of the context.)
 - Implementation
   - After reading the first word2vec paper, we implemented Word2Vec as a basic neural model, consisting of a first one-of-V layer, followed by a projection into latent space of dimension D, followed by prediction of the context. 
-  - ![](C:\Users\jfreeman\Documents\Perso\NLPProject\examples\NN.png)
+  - ![NN](https://user-images.githubusercontent.com/47647715/192298107-e61bd927-e448-407a-ae1c-6e9f037e5f34.png)
   - Prediction of the context was done in a (significantly?) different way than in 
   - To make the validation set during training, we take the final 10% of the text used for training and preprocess it separately. This is done to prevent an intersection between 
   - A slight difference here of how we predicted the context of a given word is that we modelized a context as a single (non normalized) histogram vector.
@@ -32,8 +32,8 @@ Can we associate a style of writing to a shape? This is the kind of idea we expl
 
 ## Reproduce it at home
 
-- Clone the repository by typing ``git clone ...``
-- Download the HP books on github at ...
+- Clone the repository by typing ``git clone https://github.com/josh-freeman/HPshape.git``
+- Download the HP books on github at ``https://github.com/formcept/whiteboard/tree/master/nbviewer/notebooks/data``
 - **Training:** 
   - If you don't already have one, prepare a folder at the same level as the `src` and `util` folders, by the name of the constant `RESOURCES_DIRNAME` (defaults to `examples`). Do the same for the `CHECKPOINT_DIRNAME`.
   - change the ``constants.py`` file according to what you want. You might want to think about:
