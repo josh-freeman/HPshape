@@ -5,12 +5,15 @@ BOOK_NAMES = ["Book 1 - The Philosopher's Stone.txt", "Book 2 - The Chamber of S
               "Book 3 - The Prisoner of Azkaban.txt", "Book 4 - The Goblet of Fire.txt",
               "Book 5 - The Order of the Phoenix.txt", "Book 6 - The Half Blood Prince.txt",
               "Book 7 - The Deathly Hallows.txt"]
+
+
 RESOURCES_DIRNAME = "examples"
 CHECKPOINT_DIRNAME = "ckpt"
 GRAPH_TXT_NAME = "test.txt"
 LIST_FILE_NAME_TXT = "listFile.txt"
 WORD2VEC_MODEL_FILE_NAME_BIN = "gensim-model.bin"
 WORD2VEC_MODEL_FILE_NAME_TXT = "gensim-model.txt"
+TRAINING_PRE_TITLE = "Training for "
 CURR_BOOK_NR = -1
 PREPROC = False
 BATCH_SIZE = 128

@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 from util.constants import BOOK_NAMES, RESOURCES_DIRNAME, D, WORD2VEC_HOMEMADE_MODEL_NAME, \
     CHECKPOINT_DIRNAME, \
-    LEARNING_RATE, EPOCHS, CRITERION, C
+    LEARNING_RATE, EPOCHS, CRITERION, C, TRAINING_PRE_TITLE
 from util.model import NN, train_model
 from util.pre_proc import pre_proc, vocab_from_paths_to_text_files
 from util.util import absolute_path, title_from_path, build_dl
@@ -32,7 +32,7 @@ def main():
         data_loader_validation = build_dl(list_of_samples_validation)
 
         train_model(model, CRITERION, opt, data_loader_training, EPOCHS, len(list_of_samples_training),
-                    n_validation_samples=len(list_of_samples_validation), title=title_from_path(path),
+                    n_validation_samples=len(list_of_samples_validation), title=TRAINING_PRE_TITLE+title_from_path(path),
                     dl_validation=data_loader_validation)
 
     torch.save(model, absolute_path(
