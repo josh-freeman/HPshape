@@ -31,7 +31,7 @@ set -e
 set -Eeuo pipefail
 
 sudo apt install python3-pip
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 python3 -m spacy download en_core_web_sm
 python3 -m spacy download en_core_web_trf
 

@@ -39,7 +39,7 @@ pause
 Rem run the model fromHPshape/main/__main__.py
 
 
-pip install requirements.txt
+pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 python -m spacy download en_core_web_trf
 
