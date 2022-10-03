@@ -11,7 +11,6 @@ declare -a list=("Book%201%20-%20The%20Philosopher's%20Stone.txt" "Book%202%20-%
 # About to iterate through list of titles
 for title in ${list[@]}; do
    modified="${title//%20/ }"
-   printf
 
    # unescaping spaces from url format in the title
    echo Downloading : examples/$modified
