@@ -16,9 +16,14 @@ Can we associate a style of writing to a shape? This is the kind of idea we expl
 
     ![NN](https://user-images.githubusercontent.com/47647715/192298107-e61bd927-e448-407a-ae1c-6e9f037e5f34.png)
 
-  - Prediction of the context was done in a (significantly?) different way than in the text
+  - Prediction of the context was done in a (significantly?) different way than in the article.
 
-    - Let $T$ be the number of words in a training sentence that are at the center of a window.The loss was seen as an average log likelihood, $$\displaystyle l=\frac{1}{T}\log\left({\sum_{t=1}^T\sum_\underset{j\neq 0}{{-c\leq j\leq c}}p(w_{t+j}|w_j)}\right).$$ ##TODO finish this
+    - Let $T$ be the number of words in a training sentence that are at the center of a window.The loss was seen as an average log likelihood, $$\displaystyle l=\frac{1}{T}\log\left({\sum_{t=1}^T\sum_\underset{j\neq 0}{{-c\leq j\leq c}}p(w_{t+j}|w_j)}\right).$$ 
+    - In more concrete terms, for each context, we implemented this as maximizing the probability of each of the context words within the last layer of the network
+    - This can be seen as a multi class entropy  where each sample is classified into $2c$ classes (its context).
+    - This is different from what the paper did, as skip gram introduces $2c$ regular entropies instead of one $2c-$class entropy.
+
+  - As $v\in\mathbb{R}^{D\times V}$, we can use the $i$-th column of $v$ as a representation for the $i$-th word.  
 
   - To make the validation set during training, we take the final 10% of the text used for training and preprocess it separately. This is done to prevent an intersection between 
 

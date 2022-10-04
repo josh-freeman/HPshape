@@ -53,7 +53,7 @@ def find_index(arr, x):
     return np.nonzero(arr_as1d == x)[0]
 
 
-def plot_matrix(X, labels):
+def plot_matrix(X, labels, name):
     tsvd_model = sklearn.decomposition.TruncatedSVD(n_components=7)
     X = tsvd_model.fit_transform([np.array(x) for x in X])
     tsne_model = sklearn.manifold.TSNE(n_components=3)
@@ -68,6 +68,7 @@ def plot_matrix(X, labels):
         opacity=0.8
     ))])
     gqsjk.show()
+    gqsjk.write_html(f'../{RESOURCES_DIRNAME}/{name}.html', full_html=False, include_plotlyjs='cdn')
     return xs, ys, zs
 
 
@@ -93,7 +94,7 @@ if __name__ == '__main__':
 
     pio.renderers.default = "browser"
 
-    xs, ys, zs = plot_matrix(model.embeddings, people)
+    xs, ys, zs = plot_matrix(model.embeddings, people, "out")
 
     import plotly.figure_factory as ff
     import numpy as np
